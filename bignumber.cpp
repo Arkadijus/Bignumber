@@ -1,0 +1,112 @@
+
+#include <iostream>
+#include <string>
+#include "bignumber.h"
+
+using namespace std;
+
+Bignumber::Bignumber()
+{
+    integerPart.push_back(0);
+    fractionalPart.push_back(0);
+    isPositive = true;
+}
+Bignumber::Bignumber(string num)
+{
+    if (isValidNumber(num))
+    {
+        int i = 0;
+        while (num[i] != '.')
+        {
+            integerPart.push_back(num[i] - '0');
+            i++;
+        }
+        i++;
+        while (num[i] != '\0')
+        {
+            fractionalPart.push_back(num[i] - '0');
+            i++;
+        }
+    }
+    // TODO - add else.
+}
+
+Bignumber::Bignumber(Bignumber& bn)
+{
+    integerPart = bn.integerPart;
+    fractionalPart = bn.fractionalPart;
+    isPositive = bn.isPositive;
+}
+
+bool Bignumber::isValidNumber(string& num) //TODO 5.200000000
+{
+    bool hasDecimalPoint = false;
+
+    if (num[0] == '-')
+    {
+        isPositive = false;
+        num.erase(0, 1);
+    }
+    else if (num[0] == '+')
+    {
+        isPositive = true;
+        num.erase(0, 1);
+    }
+    else if ((num[0] == '0') && (num[1] != '.'))
+    {
+        return false;
+    }
+    else
+    {
+        isPositive = true;
+    }
+    
+    for (int i = 0; i < num.size(); i++)
+    {
+        if ((num[i] < '0') || (num[i] > '9'))
+        {
+            if ((num[i] == '.') && (hasDecimalPoint == false))
+            {
+                if ((i == 0) || (i == num.size() - 1))
+                    return false;
+
+                hasDecimalPoint = true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
+    if (hasDecimalPoint)
+    {
+        return true;
+    }
+}
+
+void Bignumber::print() // fix
+{
+    if (!isPositive)
+    {
+        cout << "-";
+    }
+    for (int i = 0; i < integerPart.size(); i++)
+    {
+        cout << integerPart[i];
+    }
+    cout << ".";
+    for (int i = 0; i < fractionalPart.size(); i++)
+    {
+        cout << fractionalPart[i];
+    }
+    cout << endl;
+}
+
+
+//fd
+//4353fds
+//+432423
+//-54353
+//3213123
+//321.10000000
