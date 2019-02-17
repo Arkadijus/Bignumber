@@ -38,11 +38,28 @@ Bignumber::Bignumber(string num)
     // TODO - add else.
 }
 
-Bignumber::Bignumber(Bignumber& bn)
+Bignumber::Bignumber(const Bignumber& bn)
 {
     integerPart = bn.integerPart;
     fractionalPart = bn.fractionalPart;
     isPositive = bn.isPositive;
+}
+
+bool Bignumber::operator==(const Bignumber& rhs)
+{
+    if ((isPositive == rhs.isPositive) && (integerPart == rhs.integerPart) && (fractionalPart == rhs.fractionalPart))
+        return true;
+    else
+        return false;
+}
+
+bool Bignumber::operator==(string rhs)
+{
+    Bignumber temp(rhs);
+    if (*this == temp)
+        return true;
+    else
+        return false; 
 }
 
 void Bignumber::removeTrailingZeros(string& num)
@@ -55,7 +72,7 @@ void Bignumber::removeTrailingZeros(string& num)
     num.erase(i+1, string::npos);
 }
 
-bool Bignumber::isValidNumber(string& num, bool& hasDecimalPoint) //TODO 5.200000000
+bool Bignumber::isValidNumber(string& num, bool& hasDecimalPoint)
 {  
     if (num[0] == '-')
     {

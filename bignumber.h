@@ -11,7 +11,9 @@ class Bignumber
     public:
         Bignumber();
         Bignumber(std::string);
-        Bignumber(Bignumber&);
+        Bignumber(const Bignumber&); // a + b / a = ?
+        bool operator==(const Bignumber&);
+        bool operator==(std::string);
         void print(); // fix
                 
     private:
