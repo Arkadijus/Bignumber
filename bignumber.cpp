@@ -13,8 +13,12 @@ Bignumber::Bignumber()
 }
 Bignumber::Bignumber(string num)
 {
-    if (isValidNumber(num))
+    bool hasDecimalPoint = false;
+    if (isValidNumber(num, hasDecimalPoint))
     {
+        if (hasDecimalPoint)
+            removeTrailingZeros(num);
+
         int i = 0;
         while ((num[i] != '.') && (num[i] != '\0'))
         {
@@ -41,10 +45,18 @@ Bignumber::Bignumber(Bignumber& bn)
     isPositive = bn.isPositive;
 }
 
-bool Bignumber::isValidNumber(string& num) //TODO 5.200000000
+void Bignumber::removeTrailingZeros(string& num)
 {
-    bool hasDecimalPoint = false;
-    
+    int i = num.size() - 1;
+    while ((num[i] == '0') && (num[i-1] != '.'))
+    {
+        i--;
+    }
+    num.erase(i+1, string::npos);
+}
+
+bool Bignumber::isValidNumber(string& num, bool& hasDecimalPoint) //TODO 5.200000000
+{  
     if (num[0] == '-')
     {
         isPositive = false;

@@ -18,7 +18,8 @@ class Bignumber
         bool isPositive;
         std::vector<int> integerPart;
         std::vector<int> fractionalPart;
-        bool isValidNumber(std::string&);
+        bool isValidNumber(std::string&, bool&);
+        void removeTrailingZeros(std::string&);
 };
 
 #endif
