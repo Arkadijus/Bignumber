@@ -16,12 +16,15 @@ Bignumber::Bignumber(string num)
     if (isValidNumber(num))
     {
         int i = 0;
-        while (num[i] != '.')
+        while ((num[i] != '.') && (num[i] != '\0'))
         {
             integerPart.push_back(num[i] - '0');
             i++;
         }
-        i++;
+
+        if (num[i] == '.')
+            i++;
+
         while (num[i] != '\0')
         {
             fractionalPart.push_back(num[i] - '0');
@@ -41,7 +44,7 @@ Bignumber::Bignumber(Bignumber& bn)
 bool Bignumber::isValidNumber(string& num) //TODO 5.200000000
 {
     bool hasDecimalPoint = false;
-
+    
     if (num[0] == '-')
     {
         isPositive = false;
@@ -52,7 +55,7 @@ bool Bignumber::isValidNumber(string& num) //TODO 5.200000000
         isPositive = true;
         num.erase(0, 1);
     }
-    else if ((num[0] == '0') && (num[1] != '.'))
+    else if ((num.size() > 1) && (num[0] == '0') && (num[1] != '.'))
     {
         return false;
     }
@@ -79,10 +82,7 @@ bool Bignumber::isValidNumber(string& num) //TODO 5.200000000
         }
     }
 
-    if (hasDecimalPoint)
-    {
-        return true;
-    }
+    return true;
 }
 
 void Bignumber::print() // fix
