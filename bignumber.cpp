@@ -321,6 +321,12 @@ Bignumber Bignumber::operator-(const Bignumber& rhs)
     return result;
 }
 
+Bignumber& Bignumber::operator-() // Needs testing.
+{
+    isPositive = !isPositive;
+    return *this;
+}
+
 bool Bignumber::operator==(const Bignumber& rhs)
 {
     if ((isPositive == rhs.isPositive) && (integerPart == rhs.integerPart) && (fractionalPart == rhs.fractionalPart))
@@ -336,6 +342,23 @@ bool Bignumber::operator==(string rhs)
         return true;
     else
         return false; 
+}
+
+bool Bignumber::operator!=(const Bignumber& rhs) // Needs testing.
+{
+    if (*this == rhs)
+        return false;
+    else
+        return true;
+}
+
+bool Bignumber::operator!=(std::string rhs) // Needs testing.
+{
+    Bignumber temp(rhs);
+    if (*this != temp)
+        return true;
+    else
+        return false;
 }
 
 bool Bignumber::operator>(const Bignumber& rhs)
