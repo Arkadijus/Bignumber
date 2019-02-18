@@ -12,6 +12,10 @@ class Bignumber
         Bignumber();
         Bignumber(std::string);
         Bignumber(const Bignumber&); // a + b / a = ?
+        Bignumber& operator=(const Bignumber&);
+        Bignumber& operator=(std::string); // TODO - FIX
+        Bignumber operator+(const Bignumber&);
+        Bignumber operator+(std::string);
         bool operator==(const Bignumber&);
         bool operator==(std::string);
         void print(); // fix
