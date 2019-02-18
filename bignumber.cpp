@@ -263,7 +263,47 @@ bool Bignumber::operator==(string rhs)
         return false; 
 }
 
-void Bignumber::removeTrailingZeros(string& num)
+bool Bignumber::operator>(const Bignumber& rhs)
+{
+    if (integerPart.size() > rhs.integerPart.size())
+        return true;
+    else if (rhs.integerPart.size() > integerPart.size())
+        return false;
+    else
+    {
+        for (int i = 0; i < integerPart.size(); i++)
+        {
+            if (integerPart[i] > rhs.integerPart[i])
+                return true;
+            else if (rhs.integerPart[i] > integerPart[i])
+                return false;
+        }
+    }
+    
+    for (int i = 0; i < fractionalPart.size(); i++)
+    {
+        if (i > (rhs.fractionalPart.size() - 1))
+        {
+            return true;
+        }
+        else
+        {
+            if (fractionalPart[i] > rhs.fractionalPart[i])
+                return true;
+            else if (rhs.fractionalPart[i] > fractionalPart[i])
+                return false;
+        }
+    }
+    return false;
+}
+
+bool Bignumber::operator>(string rhs)
+{
+    Bignumber temp(rhs);
+    return (*this > temp);
+}
+
+void Bignumber::removeTrailingZeros(string& num) // add to + and -
 {
     int i = num.size() - 1;
     while ((num[i] == '0') && (num[i-1] != '.'))

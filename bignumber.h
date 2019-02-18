@@ -18,6 +18,8 @@ class Bignumber
         Bignumber operator+(std::string);
         bool operator==(const Bignumber&);
         bool operator==(std::string);
+        bool operator>(const Bignumber&);
+        bool operator>(std::string);
         void print(); // fix
                 
     private:
