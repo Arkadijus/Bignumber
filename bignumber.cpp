@@ -72,15 +72,16 @@ Bignumber Bignumber::operator+(const Bignumber& rhs)
 {
     if ((!isPositive) && (rhs.isPositive))
     {
-       // Bignumber num = *this;
-       // num.isPositive = true;
-       // return rhs - num;
+        Bignumber num = *this;
+        num.isPositive = true;
+        //return rhs - num;
+        //return -(num - rhs);
     }
     else if ((isPositive) && (!rhs.isPositive))
     {
-       // Bignumber num = rhs;
-       // num.isPositive = true;
-       // return *this - num; 
+        Bignumber num = rhs;
+        num.isPositive = true;
+        return *this - num; 
     }
     else
     {
@@ -248,7 +249,76 @@ Bignumber Bignumber::operator+(string rhs)
 
 Bignumber Bignumber::operator-(const Bignumber& rhs)
 {
+    //  a - b
+    // -a - b
+    //  a - -b
+    // -a - -b
+    if (!isPositive && rhs.isPositive)
+    {
+        Bignumber temp(*this);
+        temp.isPositive = true;
+        //return -(temp + rhs);
+    }
+    if (isPositive && !rhs.isPositive)
+    {
+        Bignumber temp(rhs);
+        temp.isPositive = true;
+        return (*this + temp);
+    }
+    if (!isPositive && !rhs.isPositive)
+    {
+        Bignumber temp(rhs);
+        temp.isPositive = true;
+        return (*this + temp);
+    }
+
+  //  if (rhs > *this)
+  //  {
+       // return -(rhs - *this);
+  // }
+
+    Bignumber a(*this);
+    Bignumber b(rhs);
+    Bignumber result;
+    result.integerPart.clear();
+    result.fractionalPart.clear();
+    makeSameLength(a, b);
+    int intPartSize = a.integerPart.size();
+    int fractPartSize = a.fractionalPart.size();
+    int borrow = 0; // change name?
     
+    for (int i = fractPartSize - 1; i >= 0; i--)
+    {
+        if (a.fractionalPart[i] - b.fractionalPart[i] - borrow < 0)
+        {
+            result.fractionalPart.push_back(a.fractionalPart[i] - b.fractionalPart[i] - borrow + 10);
+            borrow = 1;
+        }
+        else
+        {
+            result.fractionalPart.push_back(a.fractionalPart[i] - b.fractionalPart[i] - borrow);
+            borrow = 0;
+        } 
+    }
+
+    for (int i = intPartSize - 1; i >= 0; i--)
+    {
+        if (a.integerPart[i] - b.integerPart[i] - borrow < 0)
+        {
+            result.integerPart.push_back(a.integerPart[i] - b.integerPart[i] - borrow + 10);
+            borrow = 1;
+        }
+        else
+        {
+            result.integerPart.push_back(a.integerPart[i] - b.integerPart[i] - borrow);
+            borrow = 0;
+        } 
+    }
+
+    reverse(result.fractionalPart.begin(), result.fractionalPart.end());
+    reverse(result.integerPart.begin(), result.integerPart.end());
+    
+    return result;
 }
 
 bool Bignumber::operator==(const Bignumber& rhs)
