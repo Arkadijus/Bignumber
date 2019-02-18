@@ -23,7 +23,7 @@ class Bignumber
         bool operator==(std::string);
         bool operator!=(const Bignumber&);
         bool operator!=(std::string);
-        bool operator>(const Bignumber&);
+        bool operator>(const Bignumber&) const;
         bool operator>(std::string);
         void print(); // fix
                 

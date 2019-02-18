@@ -74,8 +74,8 @@ Bignumber Bignumber::operator+(const Bignumber& rhs)
     {
         Bignumber num = *this;
         num.isPositive = true;
-        //return rhs - num;
-        //return -(num - rhs);
+        //return rhs - num; //TODO function const;
+        return -(num - rhs);
     }
     else if ((isPositive) && (!rhs.isPositive))
     {
@@ -89,11 +89,7 @@ Bignumber Bignumber::operator+(const Bignumber& rhs)
         result.fractionalPart.clear();
         result.integerPart.clear();
         int carry = 0;
-      //  int longerFractionPartSize = fractionalPart.size() > rhs.fractionalPart.size() ? fractionalPart.size() : rhs.fractionalPart.size();
-      //  int longerIntegerPartSize = integerPart.size() > rhs.integerPart.size() ? integerPart.size() : rhs.integerPart.size();
-      //  int shorterFractionPartSize = fractionalPart.size() < rhs.fractionalPart.size() ? fractionalPart.size() : rhs.fractionalPart.size();
-      //  int shorterIntegerPartSize = integerPart.size() < rhs.integerPart.size() ? integerPart.size() : rhs.integerPart.size();
-      //  cout << endl << endl << rhs.fractionalPart.size() << endl;
+
         if (fractionalPart.size() > rhs.fractionalPart.size())
         {
             for (int i = fractionalPart.size() - 1; i >= 0; i--)
@@ -257,7 +253,7 @@ Bignumber Bignumber::operator-(const Bignumber& rhs)
     {
         Bignumber temp(*this);
         temp.isPositive = true;
-        //return -(temp + rhs);
+        return -(temp + rhs);
     }
     if (isPositive && !rhs.isPositive)
     {
@@ -272,10 +268,11 @@ Bignumber Bignumber::operator-(const Bignumber& rhs)
         return (*this + temp);
     }
 
-  //  if (rhs > *this)
-  //  {
-       // return -(rhs - *this);
-  // }
+    if (rhs > *this)
+    {
+        Bignumber temp(rhs);
+        return -(temp - *this);
+    }
 
     Bignumber a(*this);
     Bignumber b(rhs);
@@ -361,7 +358,7 @@ bool Bignumber::operator!=(std::string rhs) // Needs testing.
         return false;
 }
 
-bool Bignumber::operator>(const Bignumber& rhs)
+bool Bignumber::operator>(const Bignumber& rhs) const
 {
     if (integerPart.size() > rhs.integerPart.size())
         return true;
