@@ -246,6 +246,11 @@ Bignumber Bignumber::operator+(string rhs)
     return result;
 }
 
+Bignumber Bignumber::operator-(const Bignumber& rhs)
+{
+    
+}
+
 bool Bignumber::operator==(const Bignumber& rhs)
 {
     if ((isPositive == rhs.isPositive) && (integerPart == rhs.integerPart) && (fractionalPart == rhs.fractionalPart))
@@ -373,6 +378,38 @@ void Bignumber::print() // fix
     cout << endl;
 }
 
+void Bignumber::makeSameLength(Bignumber& num1, Bignumber& num2)
+{
+    int intSize1 = num1.integerPart.size();
+    int intSize2 = num2.integerPart.size();
+    int fractSize1 = num1.fractionalPart.size();
+    int fractSize2 = num2.fractionalPart.size();
+    int intSizeDiff = (intSize1 > intSize2) ? intSize1 - intSize2 : intSize2 - intSize1;
+    int fractSizeDiff = (fractSize1 > fractSize2) ? fractSize1 - fractSize2 : fractSize2 - fractSize1;
+    vector<int>::iterator it;
+
+    if (intSize1 > intSize2)
+    {
+        it = num2.integerPart.begin();
+        num2.integerPart.insert(it, intSizeDiff, 0);
+    }
+    else if (intSize2 > intSize1)
+    {
+        it = num1.integerPart.begin();
+        num1.integerPart.insert(it, intSizeDiff, 0);
+    }
+    if (fractSize1 > fractSize2)
+    {
+        it = num2.fractionalPart.end();
+        num2.fractionalPart.insert(it, fractSizeDiff, 0);
+    }
+    else if (fractSize2 > fractSize1)
+    {
+        
+        it = num1.fractionalPart.end();
+        num1.fractionalPart.insert(it, fractSizeDiff, 0);
+    }
+}
 
 //fd
 //4353fds

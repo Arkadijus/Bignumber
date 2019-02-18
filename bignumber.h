@@ -16,6 +16,8 @@ class Bignumber
         Bignumber& operator=(std::string); // TODO - FIX
         Bignumber operator+(const Bignumber&);
         Bignumber operator+(std::string);
+        Bignumber operator-(const Bignumber&);
+        Bignumber operator-(std::string);
         bool operator==(const Bignumber&);
         bool operator==(std::string);
         bool operator>(const Bignumber&);
@@ -28,6 +30,7 @@ class Bignumber
         std::vector<int> fractionalPart;
         bool isValidNumber(std::string&, bool&);
         void removeTrailingZeros(std::string&);
+        void makeSameLength(Bignumber&, Bignumber&);
 };
 
 #endif
