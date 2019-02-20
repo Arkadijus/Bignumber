@@ -418,7 +418,7 @@ Bignumber Bignumber::operator*(const Bignumber& rhs)
     result.integerPart.erase(result.integerPart.end() - decimalPlace, result.integerPart.end());
 
     result.isPositive = (isPositive == rhs.isPositive) ? true : false;
-
+    removeTrailingZeros(result);
     return result;
 }
 
@@ -518,6 +518,16 @@ void Bignumber::removeTrailingZeros(string& num) // add to + and -
     num.erase(i+1, string::npos);
 }
 
+void Bignumber::removeTrailingZeros(Bignumber& num)
+{
+    int i = num.fractionalPart.size() - 1;
+    while (num.fractionalPart[i] == 0)
+    {
+        i--;
+    }
+    num.fractionalPart.erase(num.fractionalPart.begin() + i + 1, num.fractionalPart.end());
+}
+
 bool Bignumber::isValidNumber(string& num, bool& hasDecimalPoint)
 {  
     if (num[0] == '-')
@@ -576,6 +586,23 @@ void Bignumber::print() // fix
         cout << fractionalPart[i];
     }
     cout << endl;
+}
+
+string Bignumber::toString()
+{
+    string num = "";
+    if (!isPositive)
+        num.push_back('-');
+    for (int i = 0; i < integerPart.size(); i++)
+    {
+        num.push_back(integerPart[i] + '0');
+    }
+    num.push_back('.');
+    for (int i = 0; i < fractionalPart.size(); i++)
+    {
+        num.push_back(fractionalPart[i] + '0');
+    }
+    return num;
 }
 
 void Bignumber::makeSameLength(Bignumber& num1, Bignumber& num2)

@@ -18,7 +18,7 @@ class Bignumber
         Bignumber operator+(std::string);
         Bignumber operator-(const Bignumber&);
         Bignumber operator-(std::string);
-        Bignumber operator*(const Bignumber&);
+        Bignumber operator*(const Bignumber&); //TODO - remove trailing zeros
         Bignumber operator*(std::string);
         Bignumber& operator-();
         bool operator==(const Bignumber&) const;
@@ -28,6 +28,7 @@ class Bignumber
         bool operator>(const Bignumber&) const;
         bool operator>(std::string);
         void print(); // fix
+        std::string toString();
                 
     private:
         bool isPositive;
@@ -35,6 +36,7 @@ class Bignumber
         std::vector<int> fractionalPart;
         bool isValidNumber(std::string&, bool&);
         void removeTrailingZeros(std::string&);
+        void removeTrailingZeros(Bignumber&);
         void makeSameLength(Bignumber&, Bignumber&);
 };
 
