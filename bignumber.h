@@ -18,9 +18,11 @@ class Bignumber
         Bignumber operator+(std::string);
         Bignumber operator-(const Bignumber&);
         Bignumber operator-(std::string);
+        Bignumber operator*(const Bignumber&);
+        Bignumber operator*(std::string);
         Bignumber& operator-();
-        bool operator==(const Bignumber&);
-        bool operator==(std::string);
+        bool operator==(const Bignumber&) const;
+        bool operator==(std::string) const;
         bool operator!=(const Bignumber&);
         bool operator!=(std::string);
         bool operator>(const Bignumber&) const;

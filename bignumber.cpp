@@ -318,13 +318,123 @@ Bignumber Bignumber::operator-(const Bignumber& rhs)
     return result;
 }
 
+Bignumber Bignumber::operator*(const Bignumber& rhs)
+{
+    if (*this == "0.0" || rhs == "0.0") // Change to 0?
+    {
+        Bignumber temp("0.0");
+        return temp;
+    }
+    if (*this == "1.0" || *this == "-1.0")
+    {
+        Bignumber temp(rhs);
+        temp.isPositive = (temp.isPositive == isPositive) ? true : false;
+        return temp;
+        //return rhs;
+    }
+    if (rhs == "1.0" || rhs == "-1.0")
+    {
+        Bignumber temp(*this);
+        temp.isPositive = (temp.isPositive == rhs.isPositive) ? true : false;
+        return temp;
+    }
+
+    Bignumber result;
+    result.integerPart.clear();   //TODO - no clear?
+    result.fractionalPart.clear();
+
+    Bignumber temp;
+    temp.integerPart.clear();   //TODO - no temp
+    temp.fractionalPart.clear();
+
+    vector<int> noDecimals1 = integerPart;
+    noDecimals1.insert(noDecimals1.end(), fractionalPart.begin(), fractionalPart.end()); 
+    int size1 = noDecimals1.size();
+
+    vector<int> noDecimals2 = rhs.integerPart;
+    noDecimals2.insert(noDecimals2.end(), rhs.fractionalPart.begin(), rhs.fractionalPart.end());
+    int size2 = noDecimals2.size();
+
+    int carry = 0;
+
+    if (size1 > size2)
+    {
+        for (int i = size2 - 1; i >= 0; i--)
+        {
+            for (int j = size1 - 1; j >=0; j--)
+            {
+                if (noDecimals2[i] * noDecimals1[j] + carry >= 10)
+                {
+                    temp.integerPart.push_back((noDecimals2[i] * noDecimals1[j] + carry) % 10);
+                    carry = (noDecimals2[i] * noDecimals1[j] + carry) / 10;
+                }
+                else
+                {
+                    temp.integerPart.push_back(noDecimals2[i] * noDecimals1[j] + carry);
+                    carry = 0;
+                }
+            }
+            if (carry != 0)
+            {
+                temp.integerPart.push_back(carry);
+                carry = 0;
+            }
+            reverse(temp.integerPart.begin(), temp.integerPart.end());
+            temp.integerPart.insert(temp.integerPart.end(), size2 - i - 1, 0);
+            result = result + temp;
+            temp.integerPart.clear();
+        }
+    }
+    else
+    {
+        for (int i = size1 - 1; i >= 0; i--)
+        {
+            for (int j = size2 - 1; j >=0; j--)
+            {
+                if (noDecimals2[j] * noDecimals1[i] + carry >= 10)
+                {
+                    temp.integerPart.push_back((noDecimals2[j] * noDecimals1[i] + carry) % 10);
+                    carry = (noDecimals2[j] * noDecimals1[i] + carry) / 10;
+                }
+                else
+                {
+                    temp.integerPart.push_back(noDecimals2[j] * noDecimals1[i] + carry);
+                    carry = 0;
+                }
+            }
+            if (carry != 0)
+            {
+                temp.integerPart.push_back(carry);
+                carry = 0;
+            }
+            reverse(temp.integerPart.begin(), temp.integerPart.end());
+            temp.integerPart.insert(temp.integerPart.end(), size1 - i - 1, 0);
+            result = result + temp;
+            temp.integerPart.clear();
+        }
+    }
+    int decimalPlace = fractionalPart.size() + rhs.fractionalPart.size();
+    result.fractionalPart.insert(result.fractionalPart.end(), result.integerPart.end() - decimalPlace, result.integerPart.end());
+    result.integerPart.erase(result.integerPart.end() - decimalPlace, result.integerPart.end());
+
+    result.isPositive = (isPositive == rhs.isPositive) ? true : false;
+
+    return result;
+}
+
+Bignumber Bignumber::operator*(string rhs)
+{
+    Bignumber temp(rhs);
+    return *this * temp;
+}
+
 Bignumber& Bignumber::operator-() // Needs testing.
 {
     isPositive = !isPositive;
     return *this;
 }
 
-bool Bignumber::operator==(const Bignumber& rhs)
+bool Bignumber::operator==(const Bignumber& rhs) const // -0 == 0
 {
     if ((isPositive == rhs.isPositive) && (integerPart == rhs.integerPart) && (fractionalPart == rhs.fractionalPart))
         return true;
@@ -332,7 +442,7 @@ bool Bignumber::operator==(const Bignumber& rhs)
         return false;
 }
 
-bool Bignumber::operator==(string rhs)
+bool Bignumber::operator==(string rhs) const
 {
     Bignumber temp(rhs);
     if (*this == temp)
