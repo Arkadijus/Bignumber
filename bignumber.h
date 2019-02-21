@@ -20,6 +20,8 @@ class Bignumber
         Bignumber operator-(std::string);
         Bignumber operator*(const Bignumber&); //TODO - remove trailing zeros
         Bignumber operator*(std::string);
+        Bignumber operator/(const Bignumber&);
+        Bignumber operator/(std::string);
         Bignumber& operator-();
         bool operator==(const Bignumber&) const;
         bool operator==(std::string) const;
@@ -27,6 +29,8 @@ class Bignumber
         bool operator!=(std::string);
         bool operator>(const Bignumber&) const;
         bool operator>(std::string);
+        bool operator>=(const Bignumber&) const;
+        bool operator>=(std::string);
         void print(); // fix
         std::string toString();
                 
@@ -37,6 +41,7 @@ class Bignumber
         bool isValidNumber(std::string&, bool&);
         void removeTrailingZeros(std::string&);
         void removeTrailingZeros(Bignumber&);
+        void removeLeadingZeros(Bignumber&);
         void makeSameLength(Bignumber&, Bignumber&);
 };
 
