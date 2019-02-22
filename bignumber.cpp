@@ -560,7 +560,7 @@ bool Bignumber::operator==(string rhs) const
         return false; 
 }
 
-bool Bignumber::operator!=(const Bignumber& rhs) // Needs testing.
+bool Bignumber::operator!=(const Bignumber& rhs) const // Needs testing.
 {
     if (*this == rhs)
         return false;
@@ -568,7 +568,7 @@ bool Bignumber::operator!=(const Bignumber& rhs) // Needs testing.
         return true;
 }
 
-bool Bignumber::operator!=(std::string rhs) // Needs testing.
+bool Bignumber::operator!=(std::string rhs) const // Needs testing.
 {
     Bignumber temp(rhs);
     if (*this != temp)
@@ -612,10 +612,23 @@ bool Bignumber::operator>(const Bignumber& rhs) const
     return false;
 }
 
-bool Bignumber::operator>(string rhs)
+bool Bignumber::operator>(string rhs) const
 {
     Bignumber temp(rhs);
     return (*this > temp);
+}
+
+bool Bignumber::operator<(const Bignumber& rhs) const // test
+{
+    if (*this >= rhs)
+        return false;
+    else
+        return true;
+}
+bool Bignumber::operator<(string rhs) const
+{
+    Bignumber temp(rhs);
+    return (*this < rhs);
 }
 
 bool Bignumber::operator>=(const Bignumber& rhs) const // test
@@ -626,10 +639,23 @@ bool Bignumber::operator>=(const Bignumber& rhs) const // test
         return false;
 }
 
-bool Bignumber::operator>=(std::string rhs) // Test
+bool Bignumber::operator>=(std::string rhs) const// Test
 {
     Bignumber temp(rhs);
     return (*this >= rhs);
+}
+
+bool Bignumber::operator<=(const Bignumber& rhs) const
+{
+    if (*this > rhs)
+        return false;
+    else
+        return true;
+}
+bool Bignumber::operator<=(string rhs) const
+{
+    Bignumber temp(rhs);
+    return (*this <= temp);
 }
 
 void Bignumber::removeTrailingZeros(string& num) // add to + and -

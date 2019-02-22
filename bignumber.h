@@ -25,12 +25,16 @@ class Bignumber
         Bignumber& operator-();
         bool operator==(const Bignumber&) const;
         bool operator==(std::string) const;
-        bool operator!=(const Bignumber&);
-        bool operator!=(std::string);
+        bool operator!=(const Bignumber&) const;
+        bool operator!=(std::string) const;
         bool operator>(const Bignumber&) const;
-        bool operator>(std::string);
+        bool operator>(std::string) const;
+        bool operator<(const Bignumber&) const;
+        bool operator<(std::string) const;
         bool operator>=(const Bignumber&) const;
-        bool operator>=(std::string);
+        bool operator>=(std::string) const;
+        bool operator<=(const Bignumber&) const;
+        bool operator<=(std::string) const; 
         void print(); // fix
         std::string toString();
                 
