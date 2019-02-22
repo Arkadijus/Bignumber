@@ -5,6 +5,8 @@
 #include <vector>
 #include "bignumber.h"
 
+#define MAX_DECIMAL_PLACES 50     // Maximum number of decimal places after divison
+
 using namespace std;
 
 Bignumber::Bignumber()
@@ -231,7 +233,7 @@ Bignumber Bignumber::operator+(const Bignumber& rhs)
 
         reverse(result.fractionalPart.begin(), result.fractionalPart.end());  
         reverse(result.integerPart.begin(), result.integerPart.end());
-
+        removeTrailingZeros(result);
         return result;
     }
 }   
@@ -315,6 +317,7 @@ Bignumber Bignumber::operator-(const Bignumber& rhs)
     reverse(result.fractionalPart.begin(), result.fractionalPart.end());
     reverse(result.integerPart.begin(), result.integerPart.end());
     removeLeadingZeros(result);
+    removeTrailingZeros(result);
     return result;
 }
 
@@ -476,13 +479,14 @@ Bignumber Bignumber::operator/(const Bignumber& rhs)
     
     divisor.integerPart.insert(divisor.integerPart.begin(), rhs.integerPart.begin(), rhs.integerPart.end());
     divisor.integerPart.insert(divisor.integerPart.end(), rhs.fractionalPart.begin(), rhs.fractionalPart.end());
+    removeLeadingZeros(divisor);
     
 
     /* for (int i = 0; i < divisor.integerPart.size(); i++)
     {
         cout << divisor.integerPart[i] << endl;
     } */
-    
+    //cout << dividend.size();
     for (int i = 0; i < dividend.size(); i++)
     {
         temp.integerPart.push_back(dividend[i]);
@@ -500,7 +504,7 @@ Bignumber Bignumber::operator/(const Bignumber& rhs)
         quotient = 0;
     }
     //temp.print();
-    while (temp != "0.0" && decimalPlaces != 50)
+    while (temp != "0.0" && decimalPlaces != MAX_DECIMAL_PLACES)
     {
         temp.integerPart.push_back(0);
         while (temp >= divisor)
@@ -513,10 +517,15 @@ Bignumber Bignumber::operator/(const Bignumber& rhs)
         //temp.print();
         decimalPlaces++;
     }
-    int dp = 0;
+    int dp = 0; // change
     dp = rhs.fractionalPart.size() + integerPart.size();
     result.fractionalPart.insert(result.fractionalPart.begin(), result.integerPart.begin() + dp, result.integerPart.end());
+    if (result.fractionalPart.size() == 0)
+        result.fractionalPart.push_back(0);
     result.integerPart.erase(result.integerPart.begin() + dp, result.integerPart.end());
+    if (result.fractionalPart.size() > MAX_DECIMAL_PLACES)
+        result.fractionalPart.erase(result.fractionalPart.begin() + MAX_DECIMAL_PLACES, result.fractionalPart.end());
+    removeTrailingZeros(result);
     removeLeadingZeros(result);
     result.isPositive = (isPositive == rhs.isPositive) ? true : false;
     return result;
