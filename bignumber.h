@@ -22,6 +22,8 @@ class Bignumber
         Bignumber operator*(std::string);
         Bignumber operator/(const Bignumber&);
         Bignumber operator/(std::string);
+        Bignumber operator%(const Bignumber&);
+        Bignumber operator%(std::string);
         Bignumber operator-() const;
         bool operator==(const Bignumber&) const;
         bool operator==(std::string) const;
@@ -37,6 +39,7 @@ class Bignumber
         bool operator<=(std::string) const; 
         void print(); // fix
         std::string toString();
+        Bignumber myAbs() const;
                 
     private:
         bool isPositive;

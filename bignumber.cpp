@@ -67,6 +67,8 @@ Bignumber::Bignumber(const Bignumber& bn)
 
 Bignumber& Bignumber::operator=(const Bignumber& rhs)
 {
+    if (this == &rhs)
+        return *this;
     isPositive = rhs.isPositive;
     integerPart = rhs.integerPart;
     fractionalPart = rhs.fractionalPart;
@@ -75,7 +77,6 @@ Bignumber& Bignumber::operator=(const Bignumber& rhs)
 
 Bignumber& Bignumber::operator=(string rhs)
 {
-    // if temp != rhs
     Bignumber temp(rhs);
     *this = temp;
     return *this;
@@ -252,8 +253,7 @@ Bignumber Bignumber::operator+(const Bignumber& rhs)
 Bignumber Bignumber::operator+(string rhs)
 {
     Bignumber temp(rhs);
-    Bignumber result = *this + temp;
-    return result;
+    return *this + temp;
 }
 
 Bignumber Bignumber::operator-(const Bignumber& rhs)
@@ -548,6 +548,36 @@ Bignumber Bignumber::operator/(string rhs)
     return (*this / temp);
 }
 
+Bignumber Bignumber::operator%(const Bignumber& rhs)
+{
+    // 5 % 0
+    if (rhs == "0")
+    {
+        return *this; //TODO - fix
+    }
+    if ((*this).myAbs() < rhs.myAbs())
+        return *this;
+    if ((*this).myAbs() == rhs.myAbs())
+    {
+        Bignumber temp("0");
+        return temp;
+    }
+
+    Bignumber temp = *this / rhs;
+    temp.fractionalPart.clear();
+    temp.fractionalPart.push_back(0);
+    Bignumber result = *this - temp * rhs;
+    result.isPositive = isPositive;
+
+    return result;
+}
+
+Bignumber Bignumber::operator%(string rhs)
+{
+    Bignumber temp(rhs);
+    return *this % temp;
+}
+
 Bignumber Bignumber::operator-() const // Needs testing.
 {
     Bignumber temp(*this);
@@ -591,7 +621,6 @@ bool Bignumber::operator!=(std::string rhs) const
 
 bool Bignumber::operator>(const Bignumber& rhs) const
 {
-    //removeLeadingZeros(rhs); // Remove;
     if (isPositive && !rhs.isPositive)
         return true;
     if (!isPositive && rhs.isPositive)
@@ -816,6 +845,13 @@ void Bignumber::makeSameLength(Bignumber& num1, Bignumber& num2)
         it = num1.fractionalPart.end();
         num1.fractionalPart.insert(it, fractSizeDiff, 0);
     }
+}
+
+Bignumber Bignumber::myAbs() const
+{
+    Bignumber temp(*this);
+    temp.isPositive = true;
+    return temp;
 }
 
 //fd
