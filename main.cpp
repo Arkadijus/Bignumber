@@ -92,8 +92,55 @@ int main()
     assert((Bignumber("-999515.199999999999973") / Bignumber("-0.00000149")).toString() == "670815570469.7986577");
     assert((Bignumber("20") / Bignumber("3")).toString() == "6.66666666666666666666666666666666666666666666666666");
 
+    // operator==
+    //assert(Bignumber("-0") == Bignumber("0.0"));
+    assert(Bignumber("1.0") == Bignumber("1"));
+    assert(Bignumber("17.24") == Bignumber("17.240"));
+    assert(Bignumber("0.15") == Bignumber("0.15"));
+    assert(!(Bignumber("1.2") == Bignumber("12")));
+    assert(!(Bignumber("-2") == Bignumber("2")));
+    assert(!(Bignumber("1.000000000001") == Bignumber("1.000000000002")));
 
+    // operator!=
+    assert(!(Bignumber("1.0") != Bignumber("1")));
+    assert(!(Bignumber("17.24") != Bignumber("17.240")));
+    assert(!(Bignumber("0.15") != Bignumber("0.15")));
+    assert((Bignumber("1.2") != Bignumber("12")));
+    assert((Bignumber("-2") != Bignumber("2")));
+    assert((Bignumber("1.000000000001") != Bignumber("1.000000000002")));
 
+    // operator>
+    assert(Bignumber("2") > Bignumber("0.0"));
+    //assert(Bignumber("0") > Bignumber("-1"));
+    assert(Bignumber("1.12000013") > Bignumber("1.1200001200"));
+    assert(!(Bignumber("5") > Bignumber("5")));
+    assert(!(Bignumber("0.0") > Bignumber("-0")));
+    assert(!(Bignumber("3") > Bignumber("3.01")));
+    // - 0 +
+    // operator<
+    assert(Bignumber("0.0") < Bignumber("2"));
+    //assert(Bignumber("-1") < Bignumber("0"));
+    assert(Bignumber("1.1200001200") < Bignumber("1.12000013"));
+    assert(!(Bignumber("5") < Bignumber("5")));
+    //assert(!(Bignumber("-0") < Bignumber("0.0")));
+    assert(!(Bignumber("3.01") < Bignumber("3")));
+
+    // operator>=
+    assert(Bignumber("0") >= Bignumber("0.00"));
+    assert(Bignumber("-5.01") >= Bignumber("-5.01"));
+    //assert(Bignumber("2.5") >= Bignumber("-2.5"));
+    //assert(Bignumber("7") >= Bignumber("-7.11"));
+    assert(!(Bignumber("5") >= Bignumber("17")));
+    assert(!(Bignumber("-2.5") >= Bignumber("2.5")));
+    assert(!(Bignumber("99.989") >= Bignumber("99.99")));
+
+    // operator<=
+    assert(Bignumber("0.00") <= Bignumber("0"));
+    assert(Bignumber("-5.01") <= Bignumber("-5.01"));
+    //assert(Bignumber("-7.11") <= Bignumber("7"));
+    assert(!(Bignumber("17") <= Bignumber("5")));
+    //assert(!(Bignumber("2.5") <= Bignumber("-2.5")));
+    assert(!(Bignumber("99.99") <= Bignumber("99.989")));
 
 
 
