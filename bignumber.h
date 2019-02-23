@@ -10,19 +10,19 @@ class Bignumber
 {
     public:
         Bignumber();
-        Bignumber(std::string);
+        Bignumber(std::string); // should work with 00002
         Bignumber(const Bignumber&); // a + b / a = ?
         Bignumber& operator=(const Bignumber&);
         Bignumber& operator=(std::string); // TODO - FIX
         Bignumber operator+(const Bignumber&);
         Bignumber operator+(std::string);
-        Bignumber operator-(const Bignumber&);
+        Bignumber operator-(const Bignumber&); ///    0/1898
         Bignumber operator-(std::string);
         Bignumber operator*(const Bignumber&); //TODO - remove trailing zeros
         Bignumber operator*(std::string);
         Bignumber operator/(const Bignumber&);
         Bignumber operator/(std::string);
-        Bignumber& operator-();
+        Bignumber operator-() const;
         bool operator==(const Bignumber&) const;
         bool operator==(std::string) const;
         bool operator!=(const Bignumber&) const;

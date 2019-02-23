@@ -43,6 +43,17 @@ Bignumber::Bignumber(string num)
             fractionalPart.push_back(num[i] - '0');
             i++;
         }
+        //cout << this->toString() << endl;
+        //cout << integerPart[0] << endl;
+        //cout << fractionalPart[0] << endl;
+        if (integerPart.size() == 1 && fractionalPart.size() == 1)
+        {
+            if (integerPart[0] == 0 && fractionalPart[0] == 0)
+            {
+                isPositive = true;
+            }
+        }
+        //cout << this->toString() << endl;
     }
     // TODO - add else.
 }
@@ -537,13 +548,14 @@ Bignumber Bignumber::operator/(string rhs)
     return (*this / temp);
 }
 
-Bignumber& Bignumber::operator-() // Needs testing.
+Bignumber Bignumber::operator-() const // Needs testing.
 {
-    isPositive = !isPositive;
-    return *this;
+    Bignumber temp(*this);
+    temp.isPositive = !temp.isPositive;
+    return temp;
 }
 
-bool Bignumber::operator==(const Bignumber& rhs) const // -0 == 0
+bool Bignumber::operator==(const Bignumber& rhs) const
 {
     if ((isPositive == rhs.isPositive) && (integerPart == rhs.integerPart) && (fractionalPart == rhs.fractionalPart))
         return true;
@@ -560,7 +572,7 @@ bool Bignumber::operator==(string rhs) const
         return false; 
 }
 
-bool Bignumber::operator!=(const Bignumber& rhs) const // Needs testing.
+bool Bignumber::operator!=(const Bignumber& rhs) const
 {
     if (*this == rhs)
         return false;
@@ -568,7 +580,7 @@ bool Bignumber::operator!=(const Bignumber& rhs) const // Needs testing.
         return true;
 }
 
-bool Bignumber::operator!=(std::string rhs) const // Needs testing.
+bool Bignumber::operator!=(std::string rhs) const
 {
     Bignumber temp(rhs);
     if (*this != temp)
@@ -580,6 +592,13 @@ bool Bignumber::operator!=(std::string rhs) const // Needs testing.
 bool Bignumber::operator>(const Bignumber& rhs) const
 {
     //removeLeadingZeros(rhs); // Remove;
+    if (isPositive && !rhs.isPositive)
+        return true;
+    if (!isPositive && rhs.isPositive)
+        return false;
+    if (!isPositive && !rhs.isPositive)
+        return -(*this) > -rhs;
+
     if (integerPart.size() > rhs.integerPart.size())
         return true;
     else if (rhs.integerPart.size() > integerPart.size())
@@ -628,7 +647,7 @@ bool Bignumber::operator<(const Bignumber& rhs) const // test
 bool Bignumber::operator<(string rhs) const
 {
     Bignumber temp(rhs);
-    return (*this < rhs);
+    return (*this < temp);
 }
 
 bool Bignumber::operator>=(const Bignumber& rhs) const // test
@@ -642,7 +661,7 @@ bool Bignumber::operator>=(const Bignumber& rhs) const // test
 bool Bignumber::operator>=(std::string rhs) const// Test
 {
     Bignumber temp(rhs);
-    return (*this >= rhs);
+    return (*this >= temp);
 }
 
 bool Bignumber::operator<=(const Bignumber& rhs) const
@@ -652,6 +671,7 @@ bool Bignumber::operator<=(const Bignumber& rhs) const
     else
         return true;
 }
+
 bool Bignumber::operator<=(string rhs) const
 {
     Bignumber temp(rhs);
