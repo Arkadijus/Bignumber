@@ -5,7 +5,7 @@
 #include <vector>
 #include "bignumber.h"
 
-#define MAX_DECIMAL_PLACES 50     // Maximum number of decimal places after divison
+#define DIGITS_AFTER_DECIMAL 50     // Maximum number of decimal places after divison
 
 using namespace std;
 
@@ -515,7 +515,7 @@ Bignumber Bignumber::operator/(const Bignumber& rhs)
         quotient = 0;
     }
     //temp.print();
-    while (temp != "0.0" && decimalPlaces != MAX_DECIMAL_PLACES)
+    while (temp != "0.0" && decimalPlaces != DIGITS_AFTER_DECIMAL)
     {
         temp.integerPart.push_back(0);
         while (temp >= divisor)
@@ -534,8 +534,8 @@ Bignumber Bignumber::operator/(const Bignumber& rhs)
     if (result.fractionalPart.size() == 0)
         result.fractionalPart.push_back(0);
     result.integerPart.erase(result.integerPart.begin() + dp, result.integerPart.end());
-    if (result.fractionalPart.size() > MAX_DECIMAL_PLACES)
-        result.fractionalPart.erase(result.fractionalPart.begin() + MAX_DECIMAL_PLACES, result.fractionalPart.end());
+    if (result.fractionalPart.size() > DIGITS_AFTER_DECIMAL)
+        result.fractionalPart.erase(result.fractionalPart.begin() + DIGITS_AFTER_DECIMAL, result.fractionalPart.end());
     removeTrailingZeros(result);
     removeLeadingZeros(result);
     result.isPositive = (isPositive == rhs.isPositive) ? true : false;
@@ -707,6 +707,18 @@ bool Bignumber::operator<=(string rhs) const
     return (*this <= temp);
 }
 
+int Bignumber::operator[](int i) const
+{
+    if (i > (int)integerPart.size() - 1)
+        return i; //error
+    if (-i > (int)fractionalPart.size())
+        return i; //error
+    if (i >= 0)
+        return integerPart[i];
+    if (i < 0)
+        return fractionalPart[-i-1];
+}
+
 void Bignumber::removeTrailingZeros(string& num) // add to + and -
 {
     int i = num.size() - 1;
@@ -852,6 +864,21 @@ Bignumber Bignumber::myAbs() const
     Bignumber temp(*this);
     temp.isPositive = true;
     return temp;
+}
+
+int Bignumber::getIntegerPartLength() const
+{
+    return integerPart.size();
+}
+
+int Bignumber::getFractionalPartLength() const
+{
+    return fractionalPart.size();
+}     
+
+int Bignumber::getNumberLength() const
+{
+    return integerPart.size() + fractionalPart.size() + 1;    // +1 is for decimal point
 }
 
 //fd

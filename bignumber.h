@@ -36,10 +36,14 @@ class Bignumber
         bool operator>=(const Bignumber&) const;
         bool operator>=(std::string) const;
         bool operator<=(const Bignumber&) const;
-        bool operator<=(std::string) const; 
+        bool operator<=(std::string) const;
+        int operator[](int) const; 
         void print(); // fix
         std::string toString();
         Bignumber myAbs() const;
+        int getIntegerPartLength() const;
+        int getFractionalPartLength() const;
+        int getNumberLength() const;
                 
     private:
         bool isPositive;
