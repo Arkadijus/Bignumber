@@ -707,6 +707,71 @@ bool Bignumber::operator<=(string rhs) const
     return (*this <= temp);
 }
 
+Bignumber& Bignumber::operator+=(const Bignumber& rhs)
+{
+    *this = *this + rhs;
+    return *this;
+}
+
+Bignumber& Bignumber::operator+=(string rhs)
+{
+    Bignumber temp(rhs);
+    *this = *this + temp;
+    return *this;
+}
+
+Bignumber& Bignumber::operator-=(const Bignumber& rhs)
+{
+    *this = *this - rhs;
+    return *this;
+}
+
+Bignumber& Bignumber::operator-=(string rhs)
+{
+    Bignumber temp(rhs);
+    *this = *this - temp;
+    return *this;
+}
+
+Bignumber& Bignumber::operator*=(const Bignumber& rhs)
+{
+    *this = *this * rhs;
+    return *this;
+}
+
+Bignumber& Bignumber::operator*=(string rhs)
+{
+    Bignumber temp(rhs);
+    *this = *this * temp;
+    return *this;
+}
+
+Bignumber& Bignumber::operator/=(const Bignumber& rhs)
+{
+    *this = *this / rhs;
+    return *this;
+}
+
+Bignumber& Bignumber::operator/=(string rhs)
+{
+    Bignumber temp(rhs);
+    *this = *this / temp;
+    return *this;
+}
+
+Bignumber& Bignumber::operator%=(const Bignumber& rhs)
+{
+    *this = *this % rhs;
+    return *this;
+}
+
+Bignumber& Bignumber::operator%=(string rhs)
+{
+    Bignumber temp(rhs);
+    *this = *this % temp;
+    return *this;
+}
+
 int Bignumber::operator[](int i) const
 {
     if (i > (int)integerPart.size() - 1)

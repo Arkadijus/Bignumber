@@ -37,6 +37,16 @@ class Bignumber
         bool operator>=(std::string) const;
         bool operator<=(const Bignumber&) const;
         bool operator<=(std::string) const;
+        Bignumber& operator+=(const Bignumber&);
+        Bignumber& operator+=(std::string);
+        Bignumber& operator-=(const Bignumber&);
+        Bignumber& operator-=(std::string);
+        Bignumber& operator*=(const Bignumber&);
+        Bignumber& operator*=(std::string);
+        Bignumber& operator/=(const Bignumber&);
+        Bignumber& operator/=(std::string);
+        Bignumber& operator%=(const Bignumber&);
+        Bignumber& operator%=(std::string);
         int operator[](int) const; 
         void print(); // fix
         std::string toString();
