@@ -5,16 +5,18 @@
 #include <vector>
 #include "bignumber.h"
 
-#define DIGITS_AFTER_DECIMAL 50     // Maximum number of decimal places after divison
+#define DIGITS_AFTER_DECIMAL 50     // Maximum number of digits after decimal point after divison
 
 using namespace std;
 
+// Initialize with zeroes
 Bignumber::Bignumber()
 {
     integerPart.push_back(0);
     fractionalPart.push_back(0);
     isPositive = true;
 }
+
 Bignumber::Bignumber(string num)
 {
     bool hasDecimalPoint = false;
@@ -24,10 +26,9 @@ Bignumber::Bignumber(string num)
             removeTrailingZeros(num);
         else
         {
-                fractionalPart.push_back(0); // TODO - change?
+            fractionalPart.push_back(0); // In case if number is whole, make fractionalPart equal to 0
         }
         
-
         int i = 0;
         while ((num[i] != '.') && (num[i] != '\0'))
         {
@@ -43,9 +44,8 @@ Bignumber::Bignumber(string num)
             fractionalPart.push_back(num[i] - '0');
             i++;
         }
-        //cout << this->toString() << endl;
-        //cout << integerPart[0] << endl;
-        //cout << fractionalPart[0] << endl;
+
+        // Changes "-0.0" to "0.0"
         if (integerPart.size() == 1 && fractionalPart.size() == 1)
         {
             if (integerPart[0] == 0 && fractionalPart[0] == 0)
@@ -53,9 +53,14 @@ Bignumber::Bignumber(string num)
                 isPositive = true;
             }
         }
-        //cout << this->toString() << endl;
     }
-    // TODO - add else.
+    else
+    {   
+        cout << "Bad input, set to 0.0" << endl;
+        integerPart.push_back(0);
+        fractionalPart.push_back(0);
+        isPositive = true;
+    }
 }
 
 Bignumber::Bignumber(const Bignumber& bn)
@@ -88,7 +93,6 @@ Bignumber Bignumber::operator+(const Bignumber& rhs)
     {
         Bignumber num = *this;
         num.isPositive = true;
-        //return rhs - num; //TODO function const;
         return -(num - rhs);
     }
     else if ((isPositive) && (!rhs.isPositive))
@@ -202,7 +206,6 @@ Bignumber Bignumber::operator+(const Bignumber& rhs)
                         carry = 0;
                     }
                 }
-                
                 else
                 {
                     if ((integerPart[i - diffInSize] + rhs.integerPart[i] + carry) >= 10)
@@ -217,7 +220,7 @@ Bignumber Bignumber::operator+(const Bignumber& rhs)
                     }
                 }
             }
-        } //FIX
+        }
         
         if (carry != 0)
         {
@@ -225,24 +228,6 @@ Bignumber Bignumber::operator+(const Bignumber& rhs)
         }
 
         result.isPositive = isPositive;
-        /* if (carry != 0)
-        {
-            if (integerPart.size() == rhs.integerPart.size())
-            {
-                result.integerPart.push_back(1);
-                carry = 0;
-            }   
-            else if (result.integerPart[result.integerPart.size() - 1] == 9)
-            {
-                result.integerPart[result.integerPart.size() - 1] = 0;
-                result.integerPart.push_back(1);
-            }
-            else
-            {
-                result.integerPart[result.integerPart.size() - 1] += 1;
-            }
-        } */
-
         reverse(result.fractionalPart.begin(), result.fractionalPart.end());  
         reverse(result.integerPart.begin(), result.integerPart.end());
         removeTrailingZeros(result);
@@ -258,10 +243,6 @@ Bignumber Bignumber::operator+(string rhs)
 
 Bignumber Bignumber::operator-(const Bignumber& rhs)
 {
-    //  a - b
-    // -a - b
-    //  a - -b
-    // -a - -b
     if (!isPositive && rhs.isPositive)
     {
         Bignumber temp(*this);
@@ -295,7 +276,7 @@ Bignumber Bignumber::operator-(const Bignumber& rhs)
     makeSameLength(a, b);
     int intPartSize = a.integerPart.size();
     int fractPartSize = a.fractionalPart.size();
-    int borrow = 0; // change name?
+    int borrow = 0;
     
     for (int i = fractPartSize - 1; i >= 0; i--)
     {
@@ -334,7 +315,7 @@ Bignumber Bignumber::operator-(const Bignumber& rhs)
 
 Bignumber Bignumber::operator*(const Bignumber& rhs)
 {
-    if (*this == "0.0" || rhs == "0.0") // Change to 0?
+    if (*this == "0.0" || rhs == "0.0")
     {
         Bignumber temp("0.0");
         return temp;
@@ -344,7 +325,6 @@ Bignumber Bignumber::operator*(const Bignumber& rhs)
         Bignumber temp(rhs);
         temp.isPositive = (temp.isPositive == isPositive) ? true : false;
         return temp;
-        //return rhs;
     }
     if (rhs == "1.0" || rhs == "-1.0")
     {
@@ -354,11 +334,11 @@ Bignumber Bignumber::operator*(const Bignumber& rhs)
     }
 
     Bignumber result;
-    result.integerPart.clear();   //TODO - no clear?
+    result.integerPart.clear();
     result.fractionalPart.clear();
 
     Bignumber temp;
-    temp.integerPart.clear();   //TODO - no temp
+    temp.integerPart.clear();
     temp.fractionalPart.clear();
 
     vector<int> noDecimals1 = integerPart;
@@ -427,7 +407,7 @@ Bignumber Bignumber::operator*(const Bignumber& rhs)
             temp.integerPart.clear();
         }
     }
-    int decimalPlace = fractionalPart.size() + rhs.fractionalPart.size();
+    int decimalPlace = fractionalPart.size() + rhs.fractionalPart.size(); // Position of a digit after which decimal point should be placed
     result.fractionalPart.insert(result.fractionalPart.end(), result.integerPart.end() - decimalPlace, result.integerPart.end());
     result.integerPart.erase(result.integerPart.end() - decimalPlace, result.integerPart.end());
 
@@ -446,7 +426,8 @@ Bignumber Bignumber::operator/(const Bignumber& rhs)
 {
     if (rhs == "0.0")
     {
-        return *this; // Error
+        cout << "Cannot divide by 0" << endl;
+        return *this;
     }
     if (*this == "0.0")
     {
@@ -461,65 +442,44 @@ Bignumber Bignumber::operator/(const Bignumber& rhs)
 
     Bignumber divisor, temp, result;
     divisor.integerPart.clear();
-    //divisor.fractionalPart.clear();
     temp.integerPart.clear();
-    //temp.fractionalPart.clear();
     result.integerPart.clear();
     result.fractionalPart.clear();
-    //Bignumber dividend;
-    //dividend.integerPart.clear();
-    //dividend.fractionalPart.clear();
-    //dividend.integerPart.insert(dividend.integerPart.begin(), integerPart.begin(), integerPart.end());
-    //dividend.integerPart.insert(dividend.integerPart.end(), fractionalPart.begin(), fractionalPart.end());
+
     vector<int> dividend;
     dividend.insert(dividend.begin(), integerPart.begin(), integerPart.end());
     dividend.insert(dividend.end(), fractionalPart.begin(), fractionalPart.end());
-    int zerosToInsert = ((int)(rhs.fractionalPart.size() - fractionalPart.size()) > 0) ? (int)(rhs.fractionalPart.size() - fractionalPart.size()) : 0; // shorter
+    int zerosToInsert = ((int)(rhs.fractionalPart.size() - fractionalPart.size()) > 0) ? (int)(rhs.fractionalPart.size() - fractionalPart.size()) : 0;
     if (fractionalPart.size() == 1 && fractionalPart[0] == 0)
     {
         if (!(rhs.fractionalPart.size() == 1 && rhs.fractionalPart[0] == 0))
         {
-            zerosToInsert++; // test
+            zerosToInsert++;
         }
     }
 
-    //cout << zerosToInsert << endl;
     dividend.insert(dividend.end(), zerosToInsert, 0);
-    /* for (int i = 0; i < dividend.size(); i++)
-    {
-        cout << dividend[i] << endl;
-    } */
-    int quotient = 0; // rename
-    int decimalPlaces = 0;
-    
+
+    int quotient = 0;
     divisor.integerPart.insert(divisor.integerPart.begin(), rhs.integerPart.begin(), rhs.integerPart.end());
     divisor.integerPart.insert(divisor.integerPart.end(), rhs.fractionalPart.begin(), rhs.fractionalPart.end());
     removeLeadingZeros(divisor);
     
-
-    /* for (int i = 0; i < divisor.integerPart.size(); i++)
-    {
-        cout << divisor.integerPart[i] << endl;
-    } */
-    //cout << dividend.size();
     for (int i = 0; i < dividend.size(); i++)
     {
         temp.integerPart.push_back(dividend[i]);
         removeLeadingZeros(temp);
-        //temp.print();
         while (temp >= divisor)
         {
-            //temp.print();
-            //divisor.print();
             temp = temp - divisor;
-            //temp.print();
             quotient++;
         }
         result.integerPart.push_back(quotient);
         quotient = 0;
     }
-    //temp.print();
-    while (temp != "0.0" && decimalPlaces != DIGITS_AFTER_DECIMAL)
+    
+    int counter = 0;
+    while (temp != "0.0" && counter != DIGITS_AFTER_DECIMAL)
     {
         temp.integerPart.push_back(0);
         while (temp >= divisor)
@@ -529,17 +489,21 @@ Bignumber Bignumber::operator/(const Bignumber& rhs)
         }
         result.integerPart.push_back(quotient);
         quotient = 0;
-        //temp.print();
-        decimalPlaces++;
+        counter++;
     }
-    int dp = 0; // change
-    dp = rhs.fractionalPart.size() + integerPart.size();
-    result.fractionalPart.insert(result.fractionalPart.begin(), result.integerPart.begin() + dp, result.integerPart.end());
+
+    int decimalPointPlace = 0;
+    decimalPointPlace = rhs.fractionalPart.size() + integerPart.size();
+    result.fractionalPart.insert(result.fractionalPart.begin(), result.integerPart.begin() + decimalPointPlace, result.integerPart.end());
+
     if (result.fractionalPart.size() == 0)
         result.fractionalPart.push_back(0);
-    result.integerPart.erase(result.integerPart.begin() + dp, result.integerPart.end());
+
+    result.integerPart.erase(result.integerPart.begin() + decimalPointPlace, result.integerPart.end());
+
     if (result.fractionalPart.size() > DIGITS_AFTER_DECIMAL)
         result.fractionalPart.erase(result.fractionalPart.begin() + DIGITS_AFTER_DECIMAL, result.fractionalPart.end());
+
     removeTrailingZeros(result);
     removeLeadingZeros(result);
     result.isPositive = (isPositive == rhs.isPositive) ? true : false;
@@ -554,10 +518,10 @@ Bignumber Bignumber::operator/(string rhs)
 
 Bignumber Bignumber::operator%(const Bignumber& rhs)
 {
-    // 5 % 0
     if (rhs == "0")
     {
-        return *this; //TODO - fix
+        cout << "Cannot divide by 0" << endl;
+        return *this;
     }
     if ((*this).myAbs() < rhs.myAbs())
         return *this;
@@ -568,10 +532,13 @@ Bignumber Bignumber::operator%(const Bignumber& rhs)
     }
 
     Bignumber temp = *this / rhs;
+
+    // Make temp a whole number
     temp.fractionalPart.clear();
     temp.fractionalPart.push_back(0);
+
     Bignumber result = *this - temp * rhs;
-    result.isPositive = isPositive;
+    result.isPositive = isPositive; // The sign of a modulo operation result is the same as the sign of the left operand
 
     return result;
 }
@@ -582,7 +549,7 @@ Bignumber Bignumber::operator%(string rhs)
     return *this % temp;
 }
 
-Bignumber Bignumber::operator-() const // Needs testing.
+Bignumber Bignumber::operator-() const
 {
     Bignumber temp(*this);
     if (temp != "0")
@@ -671,7 +638,7 @@ bool Bignumber::operator>(string rhs) const
     return (*this > temp);
 }
 
-bool Bignumber::operator<(const Bignumber& rhs) const // test
+bool Bignumber::operator<(const Bignumber& rhs) const
 {
     if (*this >= rhs)
         return false;
@@ -684,7 +651,7 @@ bool Bignumber::operator<(string rhs) const
     return (*this < temp);
 }
 
-bool Bignumber::operator>=(const Bignumber& rhs) const // test
+bool Bignumber::operator>=(const Bignumber& rhs) const
 {
     if (*this > rhs || *this == rhs)
         return true;
@@ -692,7 +659,7 @@ bool Bignumber::operator>=(const Bignumber& rhs) const // test
         return false;
 }
 
-bool Bignumber::operator>=(std::string rhs) const// Test
+bool Bignumber::operator>=(std::string rhs) const
 {
     Bignumber temp(rhs);
     return (*this >= temp);
@@ -777,12 +744,20 @@ Bignumber& Bignumber::operator%=(string rhs)
     return *this;
 }
 
+// The first digit of a whole part corresponds to 0
+// The first digit of a fractional part corresponds to -1
 int Bignumber::operator[](int i) const
 {
     if (i > (int)integerPart.size() - 1)
-        return i; //error
+    {
+        cout << "Out of range" << endl;
+        return i;
+    }
     if (-i > (int)fractionalPart.size())
-        return i; //error
+    {
+        cout << "Out of range" << endl;
+        return i;
+    }
     if (i >= 0)
         return integerPart[i];
     if (i < 0)
@@ -813,7 +788,7 @@ Bignumber Bignumber::operator--(int)
     return temp;
 }
 
-void Bignumber::removeTrailingZeros(string& num) // add to + and -
+void Bignumber::removeTrailingZeros(string& num)
 {
     int i = num.size() - 1;
     while ((num[i] == '0') && (num[i-1] != '.'))
@@ -885,34 +860,42 @@ bool Bignumber::isValidNumber(string& num, bool& hasDecimalPoint)
     return true;
 }
 
-void Bignumber::print() // fix
+void Bignumber::print()
 {
     if (!isPositive)
     {
         cout << "-";
     }
+
     for (int i = 0; i < integerPart.size(); i++)
     {
         cout << integerPart[i];
     }
+
     cout << ".";
+
     for (int i = 0; i < fractionalPart.size(); i++)
     {
         cout << fractionalPart[i];
     }
+
     cout << endl;
 }
 
 string Bignumber::toString() const
 {
     string num = "";
+
     if (!isPositive)
         num.push_back('-');
+
     for (int i = 0; i < integerPart.size(); i++)
     {
         num.push_back(integerPart[i] + '0');
     }
+
     num.push_back('.');
+
     for (int i = 0; i < fractionalPart.size(); i++)
     {
         num.push_back(fractionalPart[i] + '0');
@@ -980,10 +963,3 @@ int Bignumber::getNumberLength() const
 {
     return integerPart.size() + fractionalPart.size() + 1;    // +1 is for decimal point
 }
-
-//fd
-//4353fds
-//+432423
-//-54353
-//3213123
-//321.10000000

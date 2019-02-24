@@ -10,15 +10,15 @@ class Bignumber
 {
     public:
         Bignumber();
-        Bignumber(std::string); // should work with 00002
-        Bignumber(const Bignumber&); // a + b / a = ?
+        Bignumber(std::string);
+        Bignumber(const Bignumber&);
         Bignumber& operator=(const Bignumber&);
-        Bignumber& operator=(std::string); // TODO - FIX
+        Bignumber& operator=(std::string);
         Bignumber operator+(const Bignumber&);
         Bignumber operator+(std::string);
-        Bignumber operator-(const Bignumber&); ///    0/1898
+        Bignumber operator-(const Bignumber&);
         Bignumber operator-(std::string);
-        Bignumber operator*(const Bignumber&); //TODO - remove trailing zeros
+        Bignumber operator*(const Bignumber&);
         Bignumber operator*(std::string);
         Bignumber operator/(const Bignumber&);
         Bignumber operator/(std::string);
@@ -52,7 +52,7 @@ class Bignumber
         Bignumber operator++(int);
         Bignumber& operator--();
         Bignumber operator--(int);
-        void print(); // fix
+        void print();
         std::string toString() const;
         Bignumber myAbs() const;
         int getIntegerPartLength() const;
