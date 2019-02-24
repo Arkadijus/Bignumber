@@ -48,12 +48,17 @@ class Bignumber
         Bignumber& operator%=(const Bignumber&);
         Bignumber& operator%=(std::string);
         int operator[](int) const; 
+        Bignumber& operator++();
+        Bignumber operator++(int);
+        Bignumber& operator--();
+        Bignumber operator--(int);
         void print(); // fix
-        std::string toString();
+        std::string toString() const;
         Bignumber myAbs() const;
         int getIntegerPartLength() const;
         int getFractionalPartLength() const;
         int getNumberLength() const;
+        friend std::ostream& operator<<(std::ostream&, const Bignumber&);
                 
     private:
         bool isPositive;

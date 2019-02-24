@@ -448,6 +448,10 @@ Bignumber Bignumber::operator/(const Bignumber& rhs)
     {
         return *this; // Error
     }
+    if (*this == "0.0")
+    {
+        return *this;
+    }
     if (rhs == "1.0" || rhs == "-1.0")
     {
         Bignumber temp(*this);
@@ -581,7 +585,8 @@ Bignumber Bignumber::operator%(string rhs)
 Bignumber Bignumber::operator-() const // Needs testing.
 {
     Bignumber temp(*this);
-    temp.isPositive = !temp.isPositive;
+    if (temp != "0")
+        temp.isPositive = !temp.isPositive;
     return temp;
 }
 
@@ -784,6 +789,30 @@ int Bignumber::operator[](int i) const
         return fractionalPart[-i-1];
 }
 
+Bignumber& Bignumber::operator++()
+{
+    return *this += "1";
+}
+
+Bignumber Bignumber::operator++(int)
+{
+    Bignumber temp(*this);
+    ++(*this);
+    return temp;
+}
+
+Bignumber& Bignumber::operator--()
+{
+    return *this -= "1";
+}
+
+Bignumber Bignumber::operator--(int)
+{
+    Bignumber temp(*this);
+    --(*this);
+    return temp;
+}
+
 void Bignumber::removeTrailingZeros(string& num) // add to + and -
 {
     int i = num.size() - 1;
@@ -874,7 +903,7 @@ void Bignumber::print() // fix
     cout << endl;
 }
 
-string Bignumber::toString()
+string Bignumber::toString() const
 {
     string num = "";
     if (!isPositive)
@@ -889,6 +918,12 @@ string Bignumber::toString()
         num.push_back(fractionalPart[i] + '0');
     }
     return num;
+}
+
+ostream& operator<<(ostream& stream, const Bignumber& rhs)
+{
+    stream << rhs.toString();
+    return stream;
 }
 
 void Bignumber::makeSameLength(Bignumber& num1, Bignumber& num2)
