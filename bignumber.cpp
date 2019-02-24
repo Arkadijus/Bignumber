@@ -5,7 +5,7 @@
 #include <vector>
 #include "bignumber.h"
 
-#define DIGITS_AFTER_DECIMAL 50     // Maximum number of digits after decimal point after divison
+#define DIGITS_AFTER_DECIMAL 100     // Maximum number of digits after decimal point after divison
 
 using namespace std;
 
