@@ -5,7 +5,7 @@
 #include <vector>
 #include "bignumber.h"
 
-#define DIGITS_AFTER_DECIMAL 100     // Maximum number of digits after decimal point after divison
+#define DIGITS_AFTER_DECIMAL 50     // Maximum number of digits after decimal point after divison
 
 using namespace std;
 
@@ -523,9 +523,9 @@ Bignumber Bignumber::operator%(const Bignumber& rhs)
         cout << "Cannot divide by 0" << endl;
         return *this;
     }
-    if ((*this).myAbs() < rhs.myAbs())
+    if ((*this).Abs() < rhs.Abs())
         return *this;
-    if ((*this).myAbs() == rhs.myAbs())
+    if ((*this).Abs() == rhs.Abs())
     {
         Bignumber temp("0");
         return temp;
@@ -760,7 +760,7 @@ int Bignumber::operator[](int i) const
     }
     if (i >= 0)
         return integerPart[i];
-    if (i < 0)
+    else
         return fractionalPart[-i-1];
 }
 
@@ -942,7 +942,7 @@ void Bignumber::makeSameLength(Bignumber& num1, Bignumber& num2)
     }
 }
 
-Bignumber Bignumber::myAbs() const
+Bignumber Bignumber::Abs() const
 {
     Bignumber temp(*this);
     temp.isPositive = true;

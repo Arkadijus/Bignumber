@@ -12,49 +12,74 @@ class Bignumber
         Bignumber();
         Bignumber(std::string);
         Bignumber(const Bignumber&);
+
         Bignumber& operator=(const Bignumber&);
         Bignumber& operator=(std::string);
+
         Bignumber operator+(const Bignumber&);
         Bignumber operator+(std::string);
+
         Bignumber operator-(const Bignumber&);
         Bignumber operator-(std::string);
+
         Bignumber operator*(const Bignumber&);
         Bignumber operator*(std::string);
+
         Bignumber operator/(const Bignumber&);
         Bignumber operator/(std::string);
+
         Bignumber operator%(const Bignumber&);
         Bignumber operator%(std::string);
+
         Bignumber operator-() const;
+
         bool operator==(const Bignumber&) const;
         bool operator==(std::string) const;
+
         bool operator!=(const Bignumber&) const;
         bool operator!=(std::string) const;
+
         bool operator>(const Bignumber&) const;
         bool operator>(std::string) const;
+
         bool operator<(const Bignumber&) const;
         bool operator<(std::string) const;
+
         bool operator>=(const Bignumber&) const;
         bool operator>=(std::string) const;
+
         bool operator<=(const Bignumber&) const;
         bool operator<=(std::string) const;
+
         Bignumber& operator+=(const Bignumber&);
         Bignumber& operator+=(std::string);
+
         Bignumber& operator-=(const Bignumber&);
         Bignumber& operator-=(std::string);
+
         Bignumber& operator*=(const Bignumber&);
         Bignumber& operator*=(std::string);
+
         Bignumber& operator/=(const Bignumber&);
         Bignumber& operator/=(std::string);
+
         Bignumber& operator%=(const Bignumber&);
         Bignumber& operator%=(std::string);
+
+        // Returns a specified digit
+        // Use positive values (and 0) for integerPart
+        // And negative values for fractionalPart
         int operator[](int) const; 
+
         Bignumber& operator++();
         Bignumber operator++(int);
+
         Bignumber& operator--();
         Bignumber operator--(int);
+
         void print();
         std::string toString() const;
-        Bignumber myAbs() const;
+        Bignumber Abs() const;
         int getIntegerPartLength() const;
         int getFractionalPartLength() const;
         int getNumberLength() const;

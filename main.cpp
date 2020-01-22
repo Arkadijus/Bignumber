@@ -2,7 +2,7 @@
 #include <iostream>
 #include "bignumber.h"
 #include <string>
-#define NDEBUG
+//#define NDEBUG
 #include <cassert>
 
 using namespace std;
